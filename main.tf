@@ -116,7 +116,7 @@ resource "aws_instance" "app_server" {
         "sudo apt install docker.io docker-compose -y",
         "sudo systemctl enable docker",
         "sudo systemctl start docker",
-        "sudo curl -L https://github.com/LucasTStephens/cs312_part2/blob/main/docker-compose.yml -o docker-compose.yml",
+        "sudo curl -fsSL https://raw.githubusercontent.com/LucasTStephens/cs312_part2/main/docker-compose.yml -o docker-compose.yml",
         "sudo docker-compose up -d",
     ]
 

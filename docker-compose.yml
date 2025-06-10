@@ -28,5 +28,3 @@ services:
       - ./data:/data
 
     restart: unless-stopped
-
-  
