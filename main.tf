@@ -73,6 +73,22 @@ resource "aws_security_group" "minecraft-sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "ssh"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "https"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -93,22 +109,24 @@ resource "aws_instance" "app_server" {
   tags = {
     Name = "Minecraft"
   }
-}
 
-provisioner "remote-exec" {
-  inline = [
-    "sudo apt-get update",
-    "sudo apt install docker.io docker-compose y",
-    "sudo systemctl enable docker",
-    "sudo systemctl start docker",
-    "sudo curl -L placeholder -o docker-compose.yml",
-    "sudo docker-compose up -d",
-  ]
+  provisioner "remote-exec" {
+    inline = [
+        "sudo apt-get update",
+        "sudo apt install docker.io docker-compose -y",
+        "sudo systemctl enable docker",
+        "sudo systemctl start docker",
+        "sudo curl -L https://github.com/LucasTStephens/cs312_part2/blob/main/docker-compose.yml -o docker-compose.yml",
+        "sudo docker-compose up -d",
+    ]
 
-  connection {
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = file("windows.pem")
-    host        = self.public_ip
+    connection {
+        type        = "ssh"
+        user        = "ubuntu"
+        private_key = file("windows.pem")
+        host        = self.public_ip
+    }
   }
 }
+
+
